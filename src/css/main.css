@@ -1,3 +1,12 @@
+.container {
+	text-align: center;
+}
+
+.todonts {
+	text-align: center;
+	margin: auto;
+}
+
 .complete {
 	color: #777;
 	text-decoration: line-through;
