@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html ng-app="ToDont">
+<head>
+	<title>To-Don't</title>
+	<link rel="stylesheet" href="src/css/main.css">
+	<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+	<script src="./ToDont.js"></script>
+</head>
+<body>
+	<div ng-controller="ListController">
+		<h1>To-Don't</h1>
+		<h3>Things to NOT do:</h3>
+		<ul>
+			<li ng-repeat="item in items" ng-class="{ complete: item.complete }">
+				<input type="checkbox" ng-checked="item.complete" ng-click="complete(item)">
+				{{ item.desc }}
+			</li>
+		</ul>
+	</div>
+</body>
+</html>
