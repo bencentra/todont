@@ -73,7 +73,8 @@ module.exports = function(grunt) {
         src: [
           'src/js/app.js',
           'src/js/ListController.js',
-          'src/js/TodoService.js'
+          'src/js/TodoService.js',
+          'src/js/ngEnter.js'
         ],
         dest: 'ToDont.js'
       }
@@ -97,7 +98,7 @@ module.exports = function(grunt) {
         tasks: ['jshint:karma', 'karma:test']
       }
     }
-    
+
   });
 
   grunt.registerTask('dev', ['jshint', 'karma:test', 'concat:src', 'watch']);

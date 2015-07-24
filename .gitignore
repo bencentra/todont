@@ -1,5 +1,6 @@
 node_modules/
 coverage/
+lib/items.json
 .DS_Store
 ToDont.js
 ToDont.js.map

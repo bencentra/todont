@@ -20,6 +20,7 @@ module.exports = function(config) {
       'src/js/app.js',
       'src/js/ListController.js',
       'src/js/TodoService.js',
+      'src/js/ngEnter.js',
       'test/spec/**/*-spec.js'
     ],
 
