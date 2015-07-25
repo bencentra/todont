@@ -15,12 +15,16 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      // External libs
       'http://code.jquery.com/jquery-2.1.4.min.js',
       'http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js',
+      'http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-mocks.js',
+      // Source
       'src/js/app.js',
       'src/js/ListController.js',
       'src/js/TodoService.js',
       'src/js/ngEnter.js',
+      // Tests
       'test/spec/**/*-spec.js'
     ],
 

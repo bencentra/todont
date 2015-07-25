@@ -2,7 +2,7 @@
 	
 	'use strict';
 
-  global.ToDont.controller('ListController', ['$scope', 'TodoService', function($scope, TodoService) {
+  global.ToDont.controller('ListController', ['$scope', '$timeout', 'TodoService', function($scope, $timeout, TodoService) {
 
     $scope.items = [];
     $scope.newItem = '';
@@ -61,8 +61,11 @@
       );
     };
 
-    $scope.getItems();
-
+    // Can this $timeout be removed?
+    $timeout(function() {
+      $scope.getItems();
+    });
+    
   }]);
 
 })(window, jQuery, angular);
