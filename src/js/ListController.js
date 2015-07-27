@@ -6,6 +6,7 @@
 
     $scope.items = [];
     $scope.newItem = '';
+    $scope.errorMsg = false;
 
     $scope.getItems = function() {
       TodoService.get().then(
@@ -13,7 +14,7 @@
           $scope.items = data;
         },
         function(error) {
-          console.error(error);
+          $scope.errorMsg = error.error;
         }
       );
     };
@@ -24,12 +25,15 @@
         null,
         function(error) {
           item.complete = !item.complete;
-          console.error(error);
+          $scope.errorMsg = error.error;
         }
       );
     };
 
     $scope.addItem = function() {
+      if ($scope.newItem === '') {
+        return;
+      }
       var item = {
         desc: $scope.newItem,
         complete: false
@@ -39,7 +43,7 @@
         null,
         function(error) {
           $scope.items.pop();
-          console.error(error);
+          $scope.errorMsg = error.error;
         }
       );
       $scope.newItem = '';
@@ -50,15 +54,15 @@
       $scope.items.forEach(function(cur, i, arr) {
         if (cur.id === item.id) {
           deleted = $scope.items.splice(i, 1);
+          TodoService.delete(item).then(
+            null,
+            function(error) {
+              $scope.items.push(deleted);
+              $scope.errorMsg = error.error;
+            }
+          );
         }
       });
-      TodoService.delete(item).then(
-        null,
-        function(error) {
-          $scope.items.push(deleted);
-          console.log(error);
-        }
-      );
     };
 
     // Can this $timeout be removed?

@@ -11,3 +11,8 @@
 	color: #777;
 	text-decoration: line-through;
 }
+
+.error {
+	font-weight: bold;
+	color: #bc0000;
+}
