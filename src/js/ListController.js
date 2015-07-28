@@ -1,13 +1,19 @@
+/*
+* ListController.js
+*
+* Main controller for the to-do list
+*/
 (function(global, $, ng) {
 	
 	'use strict';
 
   global.ToDont.controller('ListController', ['$scope', '$timeout', 'TodoService', function($scope, $timeout, TodoService) {
 
-    $scope.items = [];
-    $scope.newItem = '';
-    $scope.errorMsg = false;
+    $scope.items = [];        // Array of to-do items
+    $scope.newItem = '';      // New item to add to the list
+    $scope.errorMsg = false;  // Error message
 
+    // Get a list of saved items
     $scope.getItems = function() {
       TodoService.get().then(
         function(data) {
@@ -19,6 +25,7 @@
       );
     };
 
+    // Toggle the complete status of an item
     $scope.completeItem = function(item) {
       item.complete = !item.complete;
       TodoService.update(item).then(
@@ -30,6 +37,7 @@
       );
     };
 
+    // Add a new item to the list
     $scope.addItem = function() {
       if ($scope.newItem === '') {
         return;
@@ -49,6 +57,7 @@
       $scope.newItem = '';
     };
 
+    // Delete an item from the list
     $scope.deleteItem = function(item) {
       var deleted;
       $scope.items.forEach(function(cur, i, arr) {

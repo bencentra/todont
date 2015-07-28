@@ -1,3 +1,8 @@
+/*
+* app.js
+*
+* Initialize the ToDont app
+*/
 (function(global, $, ng) {
     
   'use strict';

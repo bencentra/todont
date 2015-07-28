@@ -1,3 +1,8 @@
+/*
+* ngEnter.js
+*
+* Directive for calling a function when the Enter key is pressed
+*/
 (function(global, $, ng) {
     
   'use strict';

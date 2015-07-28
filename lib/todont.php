@@ -1,16 +1,37 @@
 <?php
 
-$filename = 'items.json';
-$file = file_get_contents($filename);
-$items = json_decode($file, true);
+/*
+*   Setup
+*/
 
+// Don't display warnings
+error_reporting(E_ERROR | E_PARSE);
+
+// Set headers
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 header('Content-Type: application/json');
 
+// Get the data from the file, or create the file
+$filename = 'items.json';
+$file = fopen($filename, 'r');
+if (!$file) {
+    file_put_contents($filename, '[]');
+}
+else {
+    fclose($file);
+}
+$file = file_get_contents($filename);
+$items = json_decode($file, true);
+
+// Fix $_POST because PHP is dumb
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST)) {
     $_POST = json_decode(file_get_contents('php://input'), true);
 }
+
+/*
+*   Methods
+*/
 
 // GET get
 if (array_key_exists('method', $_GET) && $_GET['method'] == 'get') {
