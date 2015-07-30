@@ -2,23 +2,25 @@ describe('TodoService', function() {
     
   'use strict';
 
+  beforeEach(module('ToDont'));
+
   var TodoService, httpBackend, rootScope, q, testUrl, testItem;
 
-  function getRequest(params, result, resolve, reject) {
+  function getRequest(params, result, resolve, reject, code) {
+    code = code || 200;
     var deferred = TodoService._makeGet(params);
     deferred.then(resolve, reject);
-    httpBackend.expectGET(testUrl + params).respond(result);
+    httpBackend.expectGET(testUrl + params).respond(code, result);
     httpBackend.flush();
   }
 
-  function postRequest(data, result, resolve, reject) {
+  function postRequest(data, result, resolve, reject, code) {
+    code = code || 200;
     var deferred = TodoService._makePost(data);
     deferred.then(resolve, reject);
-    httpBackend.expectPOST(testUrl, data).respond(result);
+    httpBackend.expectPOST(testUrl, data).respond(code, result);
     httpBackend.flush();
   }
-
-  beforeEach(module('ToDont'));
 
   beforeEach(inject(function(_TodoService_, $httpBackend, $rootScope, $q) {
     testUrl = 'http://localhost:7999/todont.php';
@@ -28,6 +30,11 @@ describe('TodoService', function() {
     rootScope = $rootScope;
     q = $q;
   }));
+
+  afterEach(function() {
+    httpBackend.verifyNoOutstandingExpectation();
+    httpBackend.verifyNoOutstandingRequest();
+  });
 
   describe('initialization', function() {
 
@@ -66,7 +73,16 @@ describe('TodoService', function() {
       expect(response).toEqual(returnData);
     });
 
-    // error case
+    it('performs a GET request and encounters an error', function() {
+      var testParams, returnData, error, response;
+      testParams = '?key=value';
+      returnData = '';
+      error = function(data) {
+        response = data;
+      };
+      getRequest(testParams, returnData, null, error, 500);
+      expect(response).toEqual(returnData);
+    });
 
   });
 
@@ -102,7 +118,18 @@ describe('TodoService', function() {
       expect(response).toEqual(returnData);
     });
 
-    // error case
+    it('performs a POST request and encounters an error', function() {
+      var testData, returnData, error, response;
+      testData = {
+        key: 'value'
+      };
+      returnData = '';
+      error = function(data) {
+        response = data;
+      };
+      postRequest(testData, returnData, null, error, 500);
+      expect(response).toEqual(returnData);
+    });
 
   });
 
