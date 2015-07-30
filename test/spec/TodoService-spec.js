@@ -2,16 +2,16 @@ describe('TodoService', function() {
     
   'use strict';
 
-  var TodoService, httpBackend, rootScope, testUrl;
+  var TodoService, httpBackend, rootScope, q, testUrl, testItem;
 
   function getRequest(params, result, resolve, reject) {
     var deferred = TodoService._makeGet(params);
     deferred.then(resolve, reject);
-    httpBackend.expectGET(testUrl + testParams).respond(result);
+    httpBackend.expectGET(testUrl + params).respond(result);
     httpBackend.flush();
   }
 
-  function postRequest(data, resolve, reject) {
+  function postRequest(data, result, resolve, reject) {
     var deferred = TodoService._makePost(data);
     deferred.then(resolve, reject);
     httpBackend.expectPOST(testUrl, data).respond(result);
@@ -20,56 +20,150 @@ describe('TodoService', function() {
 
   beforeEach(module('ToDont'));
 
-  beforeEach(inject(function(_TodoService_, $httpBackend, $rootScope) {
+  beforeEach(inject(function(_TodoService_, $httpBackend, $rootScope, $q) {
     testUrl = 'http://localhost:7999/todont.php';
+    testItem = {id:1,desc:'test item',complete:false};
     TodoService = _TodoService_;
     httpBackend = $httpBackend;
     rootScope = $rootScope;
+    q = $q;
   }));
 
-  it('is defined', function() {
-    expect(TodoService).toBeDefined();
-    expect(TodoService.baseUrl).toBeDefined();
+  describe('initialization', function() {
+
+    it('is defined', function() {
+      expect(TodoService).toBeDefined();
+      expect(TodoService.baseUrl).toBeDefined();
+    });
+
   });
 
-  // _makeGet()
-  it('performs a GET request and succeeds', function() {
-    var testParams, deferred, returnData, response;
-    testParams = '?key=value';
-    returnData = {
-      key: 'value'
-    };
-    deferred = TodoService._makeGet(testParams);
-    deferred.then(
-      function(data) {
+  describe('_makeGet()', function() {
+
+    it('performs a GET request and succeeds', function() {
+      var testParams, returnData, success, response;
+      testParams = '?key=value';
+      returnData = {
+        key: 'value'
+      };
+      success = function(data) {
         response = data;
-      }
-    );
-    httpBackend.expectGET(testUrl + testParams).respond(returnData);
-    httpBackend.flush();
-    expect(response).toEqual(returnData);
-  });
+      };
+      getRequest(testParams, returnData, success, null);
+      expect(response).toEqual(returnData);
+    });
 
-  it('performs a GET request and fails', function() {
-    var testParams, deferred, returnData, response;
-    testParams = '?key=value';
-    returnData = {
-      error: 'Error message'
-    };
-    deferred = TodoService._makeGet(testParams);
-    deferred.then(
-      null,
-      function(data) {
+    it('performs a GET request and fails', function() {
+      var testParams, returnData, error, response;
+      testParams = '?key=value';
+      returnData = {
+        error: 'Error message'
+      };
+      error = function(data) {
         response = data;
-      }
-    );
-    httpBackend.expectGET(testUrl + testParams).respond(returnData);
-    httpBackend.flush();
-    expect(response).toEqual(returnData);
+      };
+      getRequest(testParams, returnData, null, error);
+      expect(response).toEqual(returnData);
+    });
+
+    // error case
+
   });
 
-  // _makePost()
-  it('performs a POST request', function() {
+  describe('_makePost()', function() {
+
+    it('performs a POST request and succeeds', function() {
+      var testData, returnData, success, response;
+      testData = {
+        key: 'value'
+      };
+      returnData = {
+        success: true
+      };
+      success = function(data) {
+        response = data;
+      };
+      postRequest(testData, returnData, success, null);
+      expect(response).toEqual(returnData);
+    });
+
+    it('performs a POST request and fails', function() {
+      var testData, returnData, error, response;
+      testData = {
+        key: 'value'
+      };
+      returnData = {
+        error: 'Error message'
+      };
+      error = function(data) {
+        response = data;
+      };
+      postRequest(testData, returnData, null, error);
+      expect(response).toEqual(returnData);
+    });
+
+    // error case
+
+  });
+
+  describe('get()', function() {
+
+    it('should call _makeGet() and return a promise', function() {
+      var deferred, result;
+      deferred = q.defer();
+      spyOn(TodoService, '_makeGet').and.returnValue(deferred.promise);
+      result = TodoService.get();
+      expect(TodoService._makeGet).toHaveBeenCalledWith('?method=get');
+      expect(result).toEqual(deferred.promise);
+    });
+
+  });
+
+  describe('update()', function() {
+
+    it('should call _makePost() and return a promise', function() {
+      var deferred, result;
+      deferred = q.defer();
+      spyOn(TodoService, '_makePost').and.returnValue(deferred.promise);
+      result = TodoService.update(testItem);
+      expect(TodoService._makePost).toHaveBeenCalledWith({
+        method: 'update',
+        item: testItem
+      });
+      expect(result).toEqual(deferred.promise);
+    });
+
+  });
+
+  describe('add()', function() {
+
+    it('should call _makePost() and return a promise', function() {
+      var deferred, result;
+      deferred = q.defer();
+      spyOn(TodoService, '_makePost').and.returnValue(deferred.promise);
+      result = TodoService.add(testItem);
+      expect(TodoService._makePost).toHaveBeenCalledWith({
+        method: 'add',
+        item: testItem
+      });
+      expect(result).toEqual(deferred.promise);
+    });
+
+  });
+
+  describe('delete()', function() {
+
+    it('should call _makePost() and return a promise', function() {
+      var deferred, result;
+      deferred = q.defer();
+      spyOn(TodoService, '_makePost').and.returnValue(deferred.promise);
+      result = TodoService.delete(testItem);
+      expect(TodoService._makePost).toHaveBeenCalledWith({
+        method: 'delete',
+        item: testItem
+      });
+      expect(result).toEqual(deferred.promise);
+    });
 
   });
 

@@ -36,12 +36,10 @@
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       }).success(function(data) {
         if (data.success === true) {
-          if (data.success) {
-            deferred.resolve(data);
-          }
-          else {
-            deferred.reject(data);
-          }
+          deferred.resolve(data);
+        }
+        else {
+          deferred.reject(data);
         }
       }).error(function(data) {
         deferred.reject(data);
