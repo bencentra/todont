@@ -23,7 +23,7 @@ describe('TodoService', function() {
   }
 
   beforeEach(inject(function(_TodoService_, $httpBackend, $rootScope, $q) {
-    testUrl = 'http://localhost:7999/todont.php';
+    testUrl = 'API_BASE_URL';
     testItem = {id:1,desc:'test item',complete:false};
     TodoService = _TodoService_;
     httpBackend = $httpBackend;

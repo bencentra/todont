@@ -9,6 +9,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     pkg: grunt.file.readJSON('package.json'),
+    config: grunt.file.readJSON('config.json'),
 
     connect: {
       local: {
@@ -80,6 +81,22 @@ module.exports = function(grunt) {
       }
     },
 
+    replace: {
+      dev: {
+        src: ['ToDont.js'],
+        dest: 'ToDont.js',
+        replacements: [
+          { from: '\'API_BASE_URL\'', to: '<%= config.API_BASE_URL %>' }
+        ]
+      }
+    },
+
+    jsonlint: {
+      config: {
+        src: ['config.json']
+      }
+    },
+
     watch: {
       src: {
         files: ['src/js/**/*.js'],
@@ -96,12 +113,17 @@ module.exports = function(grunt) {
       karma: {
         files: ['karma.conf.js'],
         tasks: ['jshint:karma', 'karma:test']
+      },
+      config: {
+        files: ['config.json'],
+        tasks: ['build']
       }
     }
 
   });
 
-  grunt.registerTask('dev', ['jshint', 'karma:test', 'concat:src', 'watch']);
+  grunt.registerTask('build', ['jsonlint', 'jshint', 'karma:test', 'concat:src', 'replace']);
+  grunt.registerTask('dev',  ['build', 'watch']);
   grunt.registerTask('test', ['karma:test']);
   grunt.registerTask('serve', ['connect:local']);
 

@@ -7,10 +7,10 @@
 	
 	'use strict';
 
-	global.ToDont.service('TodoService', ['$http', '$q', function($http, $q) {
+	global.ToDont.service('TodoService', ['$http', '$q', 'Config', function($http, $q, Config) {
 
     // BaseURL for the API
-    this.baseUrl = 'http://localhost:7999/todont.php';
+    this.baseUrl = Config.API_BASE_URL;
 
     // Make a GET request
     this._makeGet = function(params) {
