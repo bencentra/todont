@@ -1,0 +1,61 @@
+$medium-gray: #aaa;
+$light-gray: #eee;
+$border-radius: 4px;
+
+* {
+	box-sizing: border-box;
+	font-family: "Trebuchet MS", Arial, sans-serif;
+}
+
+input[type="text"] {
+	box-shadow: none;
+	border: 1px solid $medium-gray;
+	border-radius: $border-radius;
+	padding: 8px;
+}
+
+.container {
+	text-align: center;
+}
+
+.todonts {
+	text-align: center;
+	margin: auto;
+	max-width: 640px;
+	border: 1px solid $medium-gray;
+	border-radius: $border-radius;
+	tr:nth-child(odd) {
+		background-color: $light-gray;
+	}
+	td {
+		padding: 6px;
+		border: 1px solid $light-gray;
+		&:nth-child(1) {
+			width: 16px;
+		}
+		&:nth-child(2) {
+			text-align: left;
+		}
+		&:nth-child(3) {
+			width: 20px;
+		}
+	}
+}
+
+.add {
+	font-size: 16px;
+	font-weight: bold;
+	input {
+		font-size: 16px;
+	}
+}
+
+.complete {
+	color: #777;
+	text-decoration: line-through;
+}
+
+.error {
+	font-weight: bold;
+	color: #bc0000;
+}

@@ -2,15 +2,20 @@ module.exports = function(grunt) {
 
   'use strict';
 
-  //loads all grunt tasks from package.json
+  // Loads all grunt tasks from package.json - https://www.npmjs.com/package/matchdep
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-  var pkgDetails = require('./package.json');
 
   grunt.initConfig({
 
     pkg: grunt.file.readJSON('package.json'),
     config: grunt.file.readJSON('config.json'),
 
+    // Remove previously generated files - https://github.com/gruntjs/grunt-contrib-clean
+    clean: {
+      dist: ['dist/']
+    },
+
+    // Run a local webserver to host the app -https://github.com/gruntjs/grunt-contrib-connect
     connect: {
       local: {
         options: {
@@ -26,6 +31,19 @@ module.exports = function(grunt) {
       }
     },
 
+    // Compile Sass - https://github.com/sindresorhus/grunt-sass
+    sass: {
+      options: {
+        sourceMap: true
+      },
+      dist: {
+        files: {
+          'dist/ToDont.css': 'src/style/main.scss'
+        }
+      }
+    },
+
+    // Validate JS syntax - https://github.com/gruntjs/grunt-contrib-jshint
     jshint: {
       grunt: {
         src: 'Gruntfile.js'
@@ -41,6 +59,7 @@ module.exports = function(grunt) {
       }
     },
 
+    // Run unit tests - https://github.com/karma-runner/grunt-karma
     karma: {
       options: {
         configFile: 'karma.conf.js',
@@ -62,6 +81,7 @@ module.exports = function(grunt) {
       }
     },
 
+    // Concatenate source files - https://github.com/gruntjs/grunt-contrib-concat
     concat: {
       options: {
         stripBanners: true,
@@ -77,30 +97,37 @@ module.exports = function(grunt) {
           'src/js/TodoService.js',
           'src/js/ngEnter.js'
         ],
-        dest: 'ToDont.js'
+        dest: 'dist/ToDont.js'
       }
     },
 
+    // Text replace for variable substitution - https://github.com/yoniholmes/grunt-text-replace
     replace: {
       dev: {
-        src: ['ToDont.js'],
-        dest: 'ToDont.js',
+        src: ['dist/ToDont.js'],
+        dest: 'dist/ToDont.js',
         replacements: [
           { from: '\'API_BASE_URL\'', to: '<%= config.API_BASE_URL %>' }
         ]
       }
     },
 
+    // Validate JSON syntax - https://github.com/brandonramirez/grunt-jsonlint
     jsonlint: {
       config: {
         src: ['config.json']
       }
     },
 
+    // Watch files for changes - https://github.com/gruntjs/grunt-contrib-watch
     watch: {
+      style: {
+        files: ['src/style/**/*.scss'],
+        tasks: ['sass']
+      },
       src: {
         files: ['src/js/**/*.js'],
-        tasks: ['jshint:src', 'karma:test', 'concat:src']
+        tasks: ['jshint:src', 'karma:test', 'clean', 'concat:src']
       },
       test: {
         files: ['test/spec/**/*-spec.js'],
@@ -122,7 +149,8 @@ module.exports = function(grunt) {
 
   });
 
-  grunt.registerTask('build', ['jsonlint', 'jshint', 'karma:test', 'concat:src', 'replace']);
+  // Custom tasks
+  grunt.registerTask('build', ['jsonlint', 'jshint', 'karma:test', 'clean', 'sass', 'concat:src', 'replace']);
   grunt.registerTask('dev',  ['build', 'watch']);
   grunt.registerTask('test', ['karma:test']);
   grunt.registerTask('serve', ['connect:local']);
