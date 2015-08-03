@@ -3,3 +3,4 @@ coverage/
 lib/items.json
 .DS_Store
 dist/
+config.json

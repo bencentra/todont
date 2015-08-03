@@ -43,6 +43,22 @@ module.exports = function(grunt) {
       }
     },
 
+    // Minify CSS files - https://github.com/gruntjs/grunt-contrib-cssmin
+    cssmin: {
+      options: {
+        sourceMap: true
+      },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'dist',
+          src: ['*.css'],
+          dest: 'dist',
+          ext: '.min.css'
+        }]
+      }
+    },
+
     // Validate JS syntax - https://github.com/gruntjs/grunt-contrib-jshint
     jshint: {
       grunt: {
@@ -101,6 +117,19 @@ module.exports = function(grunt) {
       }
     },
 
+    // Minify JS files - https://github.com/gruntjs/grunt-contrib-uglify
+    uglify: {
+      options: {
+        sourceMap: true,
+        banner: '/*! <%= pkg.name %>.min.js, v<%= pkg.version %>, created <%= grunt.template.today("yyyy-mm-dd") %> */'
+      },
+      dist: {
+        files: {
+          'dist/ToDont.min.js': ['dist/ToDont.js']
+        }
+      }
+    },
+
     // Text replace for variable substitution - https://github.com/yoniholmes/grunt-text-replace
     replace: {
       dev: {
@@ -150,7 +179,7 @@ module.exports = function(grunt) {
   });
 
   // Custom tasks
-  grunt.registerTask('build', ['jsonlint', 'jshint', 'karma:test', 'clean', 'sass', 'concat:src', 'replace']);
+  grunt.registerTask('build', ['jsonlint', 'jshint', 'karma:test', 'clean', 'sass', 'concat:src', 'cssmin', 'replace', 'uglify']);
   grunt.registerTask('dev',  ['build', 'watch']);
   grunt.registerTask('test', ['karma:test']);
   grunt.registerTask('serve', ['connect:local']);
