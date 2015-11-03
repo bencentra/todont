@@ -12,7 +12,7 @@ describe('ngEnter directive', function() {
     spyOn(scope, 'enter');
     element = angular.element(testFixture);
     compiled = compile(element)(scope);
-    scope.$digest();
+    scope.$apply();
   }
 
   beforeEach(inject(function($rootScope, $compile) {
@@ -24,28 +24,28 @@ describe('ngEnter directive', function() {
   it('should call scope.enter() on enter key press', function() {
     event = $.Event('keypress', {which:13});
     $(compiled).trigger(event);
-    scope.$digest();
+    scope.$apply();
     expect(scope.enter).toHaveBeenCalled();
   });
 
   it('should call scope.enter() on enter key down', function() {
     event = $.Event('keydown', {which:13});
     $(compiled).trigger(event);
-    scope.$digest();
+    scope.$apply();
     expect(scope.enter).toHaveBeenCalled();
   });
 
   it('should not call scope.enter() on other key press', function() {
     event = $.Event('keypress', {which:42});
     $(compiled).trigger(event);
-    scope.$digest();
+    scope.$apply();
     expect(scope.enter).not.toHaveBeenCalled();
   });
 
   it('should not call scope.enter() on other key down', function() {
     event = $.Event('keydown', {which:42});
     $(compiled).trigger(event);
-    scope.$digest();
+    scope.$apply();
     expect(scope.enter).not.toHaveBeenCalled();
   });
 
