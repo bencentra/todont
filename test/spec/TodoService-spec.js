@@ -4,7 +4,7 @@ describe('TodoService', function() {
 
   beforeEach(module('ToDont'));
 
-  var TodoService, httpBackend, rootScope, q, testUrl, testItem;
+  var TodoService, httpBackend, q, testUrl, testItem;
 
   function getRequest(params, result, resolve, reject, code) {
     code = code || 200;
@@ -22,12 +22,11 @@ describe('TodoService', function() {
     httpBackend.flush();
   }
 
-  beforeEach(inject(function(_TodoService_, $httpBackend, $rootScope, $q) {
+  beforeEach(inject(function(_TodoService_, $httpBackend, $q) {
     testUrl = 'API_BASE_URL';
     testItem = {id:1,desc:'test item',complete:false};
     TodoService = _TodoService_;
     httpBackend = $httpBackend;
-    rootScope = $rootScope;
     q = $q;
   }));
 
