@@ -14,6 +14,7 @@
       element.bind('keydown keypress', function(e) {
         if (e.which === 13) {
           scope.$apply(function() {
+            console.log("DOING IT");
             scope.$eval(attrs.ngEnter);
           });
           e.preventDefault();

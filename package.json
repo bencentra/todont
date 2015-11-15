@@ -1,9 +1,10 @@
 {
   "name": "todont",
   "version": "1.0.0",
-  "description": "Demo todo app in Angular",
-  "main": "index.html",
+  "description": "Demo todo app in Angular and Express",
+  "main": "index.js",
   "scripts": {
+    "start": "grunt dev",
     "test": "grunt test"
   },
   "repository": {
@@ -16,11 +17,17 @@
     "url": "https://github.com/bencentra/todont/issues"
   },
   "homepage": "https://github.com/bencentra/todont",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "jsonfile": "^2.2.3"
+  },
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-connect": "^0.10.1",
+    "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-cssmin": "^0.13.0",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-contrib-uglify": "^0.9.1",

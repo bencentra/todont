@@ -31,6 +31,15 @@ module.exports = function(grunt) {
       }
     },
 
+    // Copy files - https://github.com/gruntjs/grunt-contrib-copy
+    copy: {
+      dist: {
+        files: [
+          { src: 'index.html', dest: 'dist/index.html' }
+        ]
+      }
+    },
+
     // Compile Sass - https://github.com/sindresorhus/grunt-sass
     sass: {
       options: {
@@ -150,13 +159,17 @@ module.exports = function(grunt) {
 
     // Watch files for changes - https://github.com/gruntjs/grunt-contrib-watch
     watch: {
+      copy: {
+        files: ['index.html'],
+        tasks: ['copy']
+      },
       style: {
         files: ['src/style/**/*.scss'],
         tasks: ['sass']
       },
       src: {
         files: ['src/js/**/*.js'],
-        tasks: ['jshint:src', 'karma:test', 'clean', 'concat:src']
+        tasks: ['jshint:src', 'karma:test', 'concat:src']
       },
       test: {
         files: ['test/spec/**/*-spec.js'],
@@ -179,7 +192,7 @@ module.exports = function(grunt) {
   });
 
   // Custom tasks
-  grunt.registerTask('build', ['jsonlint', 'jshint', 'karma:test', 'clean', 'sass', 'concat:src', 'cssmin', 'replace', 'uglify']);
+  grunt.registerTask('build', ['jsonlint', 'jshint', 'clean', 'copy', 'sass', 'concat:src', 'cssmin', 'replace', 'uglify', 'karma:test']);
   grunt.registerTask('dev',  ['build', 'watch']);
   grunt.registerTask('test', ['karma:test']);
   grunt.registerTask('serve', ['connect:local']);

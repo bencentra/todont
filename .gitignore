@@ -4,3 +4,4 @@ lib/items.json
 .DS_Store
 dist/
 config.json
+npm-debug.log

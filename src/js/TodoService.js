@@ -12,11 +12,13 @@
     // BaseURL for the API
     this.baseUrl = Config.API_BASE_URL;
 
-    // Make a GET request
-    this._makeGet = function(params) {
+    // Get the list of items
+    this.get = function() {
       var deferred = $q.defer();
-      $http.get(this.baseUrl + params)
-      .success(function(data) {
+      $http({
+        url: this.baseUrl,
+        method: "GET"
+      }).success(function(data) {
         if (!data.error) {
           deferred.resolve(data);
         }
@@ -29,11 +31,14 @@
       return deferred.promise;
     };
 
-    // Make a POST request
-    this._makePost = function(data) {
+    // Add a new item to the list
+    this.add = function(item) {
+      console.log('add', item);
       var deferred = $q.defer();
-      $http.post(this.baseUrl, data, {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      $http({
+        url: this.baseUrl,
+        method: "POST",
+        data: item
       }).success(function(data) {
         if (data.success === true) {
           deferred.resolve(data);
@@ -47,33 +52,45 @@
       return deferred.promise;
     };
 
-    // Get the list of items
-    this.get = function() {
-      return this._makeGet('?method=get');
-    };
-
     // Update an item
     this.update = function(item) {
-      return this._makePost({
-        method: 'update',
-        item: item
+      console.log('update', item);
+      var deferred = $q.defer();
+      $http({
+        url: this.baseUrl + item.id,
+        method: "PATCH",
+        data: item
+      }).success(function(data) {
+        if (data.success === true) {
+          deferred.resolve(data);
+        }
+        else {
+          deferred.reject(data);
+        }
+      }).error(function(data) {
+        deferred.reject(data);
       });
-    };
-
-    // Add a new item to the list
-    this.add = function(item) {
-      return this._makePost({
-        method: 'add',
-        item: item
-      });
+      return deferred.promise;
     };
 
     // Delete an item from the list
     this.delete = function(item) {
-      return this._makePost({
-        method: 'delete',
-        item: item
+      console.log('delete', item);
+      var deferred = $q.defer();
+      $http({
+        url: this.baseUrl + item.id,
+        method: "DELETE"
+      }).success(function(data) {
+        if (data.success === true) {
+          deferred.resolve(data);
+        }
+        else {
+          deferred.reject(data);
+        }
+      }).error(function(data) {
+        deferred.reject(data);
       });
+      return deferred.promise;
     };
 
   }]);

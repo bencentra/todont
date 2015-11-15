@@ -16,8 +16,8 @@
     // Get a list of saved items
     $scope.getItems = function() {
       TodoService.get().then(
-        function(data) {
-          $scope.items = data;
+        function(response) {
+          $scope.items = response.data.items;
         },
         function(error) {
           $scope.errorMsg = error.error;
@@ -27,6 +27,7 @@
 
     // Toggle the complete status of an item
     $scope.completeItem = function(item) {
+      console.log('completeItem', item);
       item.complete = !item.complete;
       TodoService.update(item).then(
         null,
@@ -43,35 +44,33 @@
         return;
       }
       var item = {
-        desc: $scope.newItem,
-        complete: false
+        desc: $scope.newItem
       };
-      $scope.items.push(item);
+      console.log('addItem', item);
       TodoService.add(item).then(
-        null,
+        function(response) {
+          $scope.newItem = '';
+          $scope.items = response.data.items;
+          console.log($scope.items);
+        },
         function(error) {
           $scope.items.pop();
           $scope.errorMsg = error.error;
         }
       );
-      $scope.newItem = '';
     };
 
     // Delete an item from the list
     $scope.deleteItem = function(item) {
-      var deleted;
-      $scope.items.forEach(function(cur, i, arr) {
-        if (cur.id === item.id) {
-          deleted = $scope.items.splice(i, 1);
-          TodoService.delete(item).then(
-            null,
-            function(error) {
-              $scope.items.push(deleted);
-              $scope.errorMsg = error.error;
-            }
-          );
+      console.log('deleteItem', item);
+      TodoService.delete(item).then(
+        function(response) {
+          $scope.items = response.data.items;
+        },
+        function(error) {
+          $scope.errorMsg = error.error;
         }
-      });
+      );
     };
 
     // Can this $timeout be removed?
