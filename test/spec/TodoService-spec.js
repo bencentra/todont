@@ -49,7 +49,21 @@ describe('TodoService', function() {
       expect(result.data.items).toEqual(testItems);
     });
 
-    // TODO: add negative test case
+    it('fails to get the todo items', function() {
+      var promise, response, result, errorMessage;
+      errorMessage = 'error message';
+      promise = TodoService.get();
+      promise.then(null, function(error) {
+        result = error;
+      });
+      response = {
+        error: errorMessage
+      };
+      httpBackend.expectGET(testUrl).respond(500, response);
+      httpBackend.flush();
+      expect(result).toEqual(response);
+      expect(result.error).toEqual(errorMessage);
+    });
 
   });
 
@@ -73,7 +87,21 @@ describe('TodoService', function() {
       expect(result.data.items).toEqual(testItems);
     });
 
-    // TODO: add negative test case
+    it('fails to add the todo item', function() {
+      var promise, response, result, errorMessage;
+      errorMessage = 'errorMessage';
+      promise = TodoService.add(testItem);
+      promise.then(null, function(error) {
+        result = error;
+      });
+      response = {
+        error: errorMessage
+      };
+      httpBackend.expectPOST(testUrl).respond(500, response);
+      httpBackend.flush();
+      expect(result).toEqual(response);
+      expect(result.error).toEqual(errorMessage);
+    });
 
   });
 
@@ -98,7 +126,22 @@ describe('TodoService', function() {
       expect(result.data.items).toEqual(testItems);
     });
 
-    // TODO: add negative test case
+    it('fails to update the todo item', function() {
+      var promise, response, result, errorMessage;
+      errorMessage = 'error message';
+      testItem.complete = true;
+      promise = TodoService.update(testItem);
+      promise.then(null, function(error) {
+        result = error;
+      });
+      response = {
+        error: errorMessage
+      };
+      httpBackend.expectPATCH(testUrl + testItem.id).respond(404, response);
+      httpBackend.flush();
+      expect(result).toEqual(response);
+      expect(result.error).toEqual(errorMessage);
+    });
 
   });
 
@@ -106,7 +149,6 @@ describe('TodoService', function() {
 
     it('deletes the given todo item', function() {
       var promise, response, result;
-      testItems = [];
       promise = TodoService.delete(testItem);
       promise.then(function(data) {
         result = data;
@@ -114,16 +156,30 @@ describe('TodoService', function() {
       response = {
         success: true,
         data: {
-          items: testItems
+          items: []
         }
       };
       httpBackend.expectDELETE(testUrl + testItem.id).respond(200, response);
       httpBackend.flush();
       expect(result).toEqual(response);
-      expect(result.data.items).toEqual(testItems);
+      expect(result.data.items).toEqual([]);
     });
 
-    // TODO: add negative test case
+    it('fails to delete the todo item', function() {
+      var promise, response, result, errorMessage;
+      errorMessage = 'error message';
+      promise = TodoService.delete(testItem);
+      promise.then(null, function(error) {
+        result = error;
+      });
+      response = {
+        error: errorMessage
+      };
+      httpBackend.expectDELETE(testUrl + testItem.id).respond(404, response);
+      httpBackend.flush();
+      expect(result).toEqual(response);
+      expect(result.error).toEqual(errorMessage);
+    });
 
   });
 
