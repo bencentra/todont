@@ -27,7 +27,6 @@
 
     // Toggle the complete status of an item
     $scope.completeItem = function(item) {
-      console.log('completeItem', item);
       item.complete = !item.complete;
       TodoService.update(item).then(
         null,
@@ -46,12 +45,10 @@
       var item = {
         desc: $scope.newItem
       };
-      console.log('addItem', item);
       TodoService.add(item).then(
         function(response) {
           $scope.newItem = '';
           $scope.items = response.data.items;
-          console.log($scope.items);
         },
         function(error) {
           $scope.items.pop();
@@ -62,7 +59,9 @@
 
     // Delete an item from the list
     $scope.deleteItem = function(item) {
-      console.log('deleteItem', item);
+      if ($scope.items.indexOf(item) === -1) {
+        return;
+      }
       TodoService.delete(item).then(
         function(response) {
           $scope.items = response.data.items;

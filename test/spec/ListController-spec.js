@@ -1,9 +1,9 @@
-xdescribe('ListController', function() {
+fdescribe('ListController', function() {
     
   'use strict';
 
   var scope, controller, timeout, q, TodoService, mockTodoService,
-      testItems, testItem, testNewItem, testResponseSuccess, testResponseFailure;
+     testItem, testItems, testNewItem, testErrorMessage, testResponseSuccess, testResponseFailure;
 
   beforeEach(module('ToDont', function($provide) {
     // Mock out TodoSerivice
@@ -18,11 +18,12 @@ xdescribe('ListController', function() {
 
   beforeEach(inject(function($rootScope, $controller, $timeout, $q, _TodoService_) {
     // Test data
-    testItems = [{id:1,desc:'test item',complete:false}];
     testItem = {id:1,desc:'test item',complete:false}; 
+    testItems = [testItem];
     testNewItem = 'test item 2';
-    testResponseSuccess = {success:true};
-    testResponseFailure = {error:'Error message'};
+    testErrorMessage = 'Error message';
+    testResponseSuccess = { success: true, data: { items: testItems } };
+    testResponseFailure = { error: testErrorMessage };
     // Services
     TodoService = _TodoService_;
     timeout = $timeout;
@@ -57,7 +58,7 @@ xdescribe('ListController', function() {
     it('successfully gets the list of items from the service', function() {
       spyOn(TodoService, 'get').and.callFake(function() {
         var deferred = q.defer();
-        deferred.resolve(testItems);
+        deferred.resolve(testResponseSuccess);
         return deferred.promise;
       });
       scope.$apply(function() {
@@ -157,7 +158,7 @@ xdescribe('ListController', function() {
       expect(TodoService.add).toHaveBeenCalled();
       expect(scope.items.length).toBe(0);
       expect(scope.errorMsg).toBe(testResponseFailure.error);
-      expect(scope.newItem).toBe('');
+      expect(scope.newItem).toBe(testNewItem);
     });
 
   });
@@ -165,6 +166,7 @@ xdescribe('ListController', function() {
   describe('deleteItem()', function() {
 
     it('successfully deletes the item from $scope.items', function() {
+      testResponseSuccess = { success: true, data: { items: [] } };
       spyOn(TodoService, 'delete').and.callFake(function() {
         var deferred = q.defer();
         deferred.resolve(testResponseSuccess);

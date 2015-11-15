@@ -33,7 +33,6 @@
 
     // Add a new item to the list
     this.add = function(item) {
-      console.log('add', item);
       var deferred = $q.defer();
       $http({
         url: this.baseUrl,
@@ -54,7 +53,6 @@
 
     // Update an item
     this.update = function(item) {
-      console.log('update', item);
       var deferred = $q.defer();
       $http({
         url: this.baseUrl + item.id,
@@ -75,7 +73,6 @@
 
     // Delete an item from the list
     this.delete = function(item) {
-      console.log('delete', item);
       var deferred = $q.defer();
       $http({
         url: this.baseUrl + item.id,
