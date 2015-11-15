@@ -1,4 +1,4 @@
-fdescribe('ListController', function() {
+describe('ListController', function() {
     
   'use strict';
 

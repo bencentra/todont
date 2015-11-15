@@ -19,7 +19,7 @@
         url: this.baseUrl,
         method: "GET"
       }).success(function(data) {
-        if (!data.error) {
+        if (data.success === true) {
           deferred.resolve(data);
         }
         else {
