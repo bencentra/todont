@@ -22,11 +22,11 @@ Create a file `config.json` with the following structure:
 
 ### Running the app
 
-* Build the client application: `grunt build`
-* Run the server: `node index.js`
+* Build the client application: `npm run build`
+* Run the server: `node server.js`
 
 Check the console output for the URL of the app, and navigate to it in your browser.
 
 ## Development
 
-To watch for all changes to files and rebuild/run unit tests, run `grunt dev`. You can also manually build the project with `grunt build` and run the unit tests with `grunt test`.
+To watch for all changes to files and rebuild/run unit tests, run `npm start`. You can also manually build the project with `npm run build` and run the unit tests with `npm test`.

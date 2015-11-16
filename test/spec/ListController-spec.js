@@ -5,16 +5,7 @@ describe('ListController', function() {
   var scope, controller, timeout, q, TodoService, mockTodoService,
      testItem, testItems, testNewItem, testErrorMessage, testResponseSuccess, testResponseFailure;
 
-  beforeEach(module('ToDont', function($provide) {
-    // Mock out TodoSerivice
-    mockTodoService = {
-      get: function() {},
-      update: function() {},
-      add: function() {},
-      delete: function() {}
-    };
-    $provide.value('TodoService', mockTodoService);
-  }));
+  beforeEach(module('ToDont'));
 
   beforeEach(inject(function($rootScope, $controller, $timeout, $q, _TodoService_) {
     // Test data

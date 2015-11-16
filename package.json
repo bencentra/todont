@@ -2,9 +2,10 @@
   "name": "todont",
   "version": "1.0.0",
   "description": "Demo todo app in Angular and Express",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "grunt dev",
+    "build": "grunt build",
     "test": "grunt test"
   },
   "repository": {
